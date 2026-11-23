@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>لوحة تحكم الموقع — د. فاطمة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- تسجيل الدخول -->
+<main id="login" class="login">
+  <div class="panel">
+    <h1>لوحة تحكم الموقع</h1>
+    <p class="muted">ادخلي بالتوكن الخاص بيكِ. التوكن بيتحفظ على جهازك بس.</p>
+    <label>اسم الـ repo على GitHub
+      <input id="l-repo" dir="ltr" value="shiitakeshytaky-bot/SHARK-NITON-" autocomplete="off">
+    </label>
+    <label>التوكن (Token)
+      <input id="l-token" type="password" dir="ltr" autocomplete="off" placeholder="github_pat_...">
+    </label>
+    <label class="chk"><input type="checkbox" id="l-remember"> تذكّرني على هذا الجهاز</label>
+    <button id="l-btn" class="btn" type="button">دخول</button>
+    <p id="l-err" class="err" role="alert"></p>
+    <details>
+      <summary>إزاي أعمل التوكن؟</summary>
+      <ol class="steps">
+        <li>ادخلي على GitHub ← صورتك فوق ← <b>Settings</b>.</li>
+        <li>من القائمة الشمال في الآخر: <b>Developer settings</b> ← <b>Personal access tokens</b> ← <b>Fine-grained tokens</b>.</li>
+        <li>اضغطي <b>Generate new token</b> واكتبي أي اسم (مثلاً: dashboard).</li>
+        <li><b>Repository access</b> ← <b>Only select repositories</b> ← اختاري الـ repo بتاع الموقع.</li>
+        <li><b>Permissions</b> ← <b>Repository permissions</b> ← <b>Contents</b> ← اختاري <b>Read and write</b>.</li>
+        <li>اضغطي <b>Generate token</b> وانسخي التوكن (بيظهر مرة واحدة بس) والصقيه هنا.</li>
+      </ol>
+      <p class="muted">التوكن ده بيدّي صلاحية على الموقع بس. ماتبعتيهوش لأي حد، ولو ضاع امسحيه من GitHub واعملي واحد جديد.</p>
+    </details>
+  </div>
+</main>
+
+<!-- اللوحة -->
+<div id="app" hidden>
+  <header class="top">
+    <strong>لوحة التحكم</strong>
+    <a href="./" target="_blank" rel="noopener">فتح الموقع ↗</a>
+    <span id="dirty" class="dirty" hidden>● فيه تغييرات لسه ماتحفظتش</span>
+    <span class="grow"></span>
+    <button id="save" class="btn" type="button">حفظ ونشر</button>
+    <button id="logout" class="btn ghost" type="button">خروج</button>
+  </header>
+  <p id="status" class="status" role="status"></p>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab on" data-tab="contact" type="button">بيانات التواصل</button>
+    <button class="tab" data-tab="about" type="button">عن الدكتورة</button>
+    <button class="tab" data-tab="services" type="button">الخدمات</button>
+    <button class="tab" data-tab="reviews" type="button">آراء العملاء</button>
+    <button class="tab" data-tab="bookings" type="button">الحجوزات</button>
+    <button class="tab" data-tab="jobs" type="button">طلبات التوظيف</button>
+  </nav>
+
+  <main class="wrap">
+    <!-- بيانات التواصل -->
+    <section data-pane="contact">
+      <div class="card">
+        <h2>الواتساب والتليفون</h2>
+        <label>رقم الواتساب (اللي بيوصله الحجز)
+          <input id="c-wa" dir="ltr" inputmode="tel" placeholder="01044705350">
+          <small class="muted" id="c-wa-hint"></small>
+        </label>
+        <label>الرقم الظاهر للزوار
+          <input data-path="contact.phoneDisplay" dir="ltr" inputmode="tel">
+        </label>
+        <label>مواعيد العمل
+          <input data-path="contact.hours" placeholder="Open 24 hours · every day  |  مفتوح 24 ساعة · كل يوم">
+          <small class="muted">اكتبيها بالإنجليزي والعربي مفصولين بـ | عشان تظهر للغتين.</small>
+        </label>
+      </div>
+      <div class="card">
+        <h2>الخريطة والسوشيال ميديا</h2>
+        <label>رابط خريطة جوجل (Embed)
+          <input data-path="contact.mapEmbedUrl" dir="ltr" placeholder="https://www.google.com/maps/embed?pb=...">
+          <small class="muted">من Google Maps: Share ← Embed a map ← انسخي قيمة src فقط. لازم يبدأ بـ https://www.google.com/maps/embed</small>
+        </label>
+        <label>فيسبوك <input data-path="contact.social.facebook" dir="ltr" placeholder="https://..."></label>
+        <label>إنستجرام <input data-path="contact.social.instagram" dir="ltr" placeholder="https://..."></label>
+        <label>تيك توك <input data-path="contact.social.tiktok" dir="ltr" placeholder="https://..."></label>
+      </div>
+    </section>
+
+    <!-- عن الدكتورة -->
+    <section data-pane="about" hidden>
+      <div class="card">
+        <h2>الصورة</h2>
+        <div class="portrait-edit">
+          <img id="p-img" alt="الصورة الحالية" width="152" height="190">
+          <div>
+            <input id="p-file" type="file" accept="image/*">
+            <small class="muted">اختاري صورة، وهتتقص تلقائيًا بنسبة 4:5 وتتضغط. يفضّل صورة عمودية والوش في النص.</small>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>النصوص <small class="muted">(لو سبتي خانة فاضية بيفضل النص المؤقت)</small></h2>
+        <div class="two">
+          <label>المؤهلات (عربي) <textarea data-path="about.qualifications.ar" rows="2"></textarea></label>
+          <label>Qualifications (English) <textarea data-path="about.qualifications.en" rows="2" dir="ltr"></textarea></label>
+          <label>سنين الخبرة (عربي) <textarea data-path="about.experience.ar" rows="2"></textarea></label>
+          <label>Experience (English) <textarea data-path="about.experience.en" rows="2" dir="ltr"></textarea></label>
+          <label>النبذة المهنية (عربي) <textarea data-path="about.bio.ar" rows="5"></textarea></label>
+          <label>Biography (English) <textarea data-path="about.bio.en" rows="5" dir="ltr"></textarea></label>
+          <label>الشهادات (عربي) <textarea data-path="about.certifications.ar" rows="3"></textarea></label>
+          <label>Certifications (English) <textarea data-path="about.certifications.en" rows="3" dir="ltr"></textarea></label>
+        </div>
+        <p class="muted">اكتبي بيانات حقيقية بس.</p>
+      </div>
+    </section>
+
+    <!-- الخدمات -->
+    <section data-pane="services" hidden>
+      <div class="card"><h2>خدمات التغذية</h2><div id="svc-nutrition"></div><button class="btn ghost" data-add="nutrition" type="button">+ إضافة خدمة تغذية</button></div>
+      <div class="card"><h2>خدمات العلاج الطبيعي</h2><div id="svc-physio"></div><button class="btn ghost" data-add="physio" type="button">+ إضافة خدمة علاج طبيعي</button></div>
+    </section>
+
+    <!-- آراء العملاء -->
+    <section data-pane="reviews" hidden>
+      <div class="card">
+        <h2>آراء العملاء</h2>
+        <p class="muted">لو القائمة فاضية بيظهر آراء تجريبية مكتوب عليها "محتوى تجريبي". أول ما تضيفي رأي حقيقي بتختفي. خدي موافقة صاحب الرأي قبل النشر، وماتنشريش نتائج علاجية أو وعود.</p>
+        <div id="rev-list"></div>
+        <button class="btn ghost" id="rev-add" type="button">+ إضافة رأي</button>
+      </div>
+    </section>
+
+    <!-- الحجوزات -->
+    <section data-pane="bookings" hidden>
+      <div class="card">
+        <h2>ربط Google Sheet</h2>
+        <label>رابط الـ Web App (من Google Apps Script)
+          <input data-path="booking.endpoint" dir="ltr" placeholder="https://script.google.com/macros/s/.../exec">
+        </label>
+        <label>كلمة السر (ADMIN_KEY)
+          <input id="bk-key" type="password" dir="ltr" autocomplete="off">
+          <small class="muted">بتتحفظ على جهازك بس، ومابتتنشرش. الرابط بيتحفظ مع "حفظ ونشر"، وبعدها الموقع يبدأ يسجّل الحجوزات.</small>
+        </label>
+        <button class="btn" id="bk-load" type="button">تحديث الحجوزات</button>
+        <p id="bk-msg" class="muted" role="status"></p>
+      </div>
+      <div id="bk-list"></div>
+    </section>
+
+    <!-- طلبات التوظيف -->
+    <section data-pane="jobs" hidden>
+      <div class="card">
+        <h2>طلبات التوظيف</h2>
+        <p class="muted">بتستخدم نفس الرابط وكلمة السر من تبويب "الحجوزات".</p>
+        <button class="btn" id="jb-load" type="button">تحديث الطلبات</button>
+        <p id="jb-msg" class="muted" role="status"></p>
+      </div>
+      <div id="jb-list"></div>
+    </section>
+  </main>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>

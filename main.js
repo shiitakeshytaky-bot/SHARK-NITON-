@@ -10,6 +10,7 @@
   var lang = 'en';
   var rendered = false;      // false until the first full render has finished
   var relayouts = [];        // 3D scenes register their layout() here
+  var about = null;          // editable About texts from content.json (dashboard)
 
   /* ---------------- Translations ----------------
      English is read from the HTML itself (data-t elements).
@@ -119,6 +120,45 @@
     { en: 'Mobility & Flexibility Programs', ar: 'برامج الحركة والمرونة', d: 'Gentle, structured work to improve range of motion.', arD: 'عمل لطيف ومنظم لتحسين مدى الحركة.' }
   ];
 
+  /* ---------------- Content from the dashboard (content.json) ----------------
+     Optional: if content.json is missing or broken, the defaults in this file
+     and in config.js are used. Everything coming from it is validated. */
+  function isHttp(u) { return typeof u === 'string' && /^https?:\/\//i.test(u); }
+  function str(v, max) { return typeof v === 'string' ? v.slice(0, max || 600) : ''; }
+  function cleanServices(list) {
+    if (!Array.isArray(list)) return null;
+    var out = list.filter(function (x) { return x && typeof x.en === 'string' && typeof x.ar === 'string' && x.en.trim() && x.ar.trim(); })
+      .map(function (x) { return { en: str(x.en, 120), ar: str(x.ar, 120), d: str(x.d, 400), arD: str(x.arD, 400) }; });
+    return out.length ? out : null;
+  }
+  function applyContent(c) {
+    if (!c || typeof c !== 'object') return;
+    var k = c.contact || {};
+    ['whatsapp', 'phoneDisplay', 'hours'].forEach(function (key) { if (typeof k[key] === 'string' && k[key].trim()) cfg[key] = k[key].trim(); });
+    if (typeof k.mapEmbedUrl === 'string') cfg.mapEmbedUrl = k.mapEmbedUrl.trim();
+    if (k.social && typeof k.social === 'object') cfg.social = k.social;
+    if (Array.isArray(c.testimonials)) cfg.testimonials = c.testimonials;
+    if (c.booking && typeof c.booking.endpoint === 'string') cfg.bookingEndpoint = c.booking.endpoint.trim();
+    if (c.about && typeof c.about === 'object') about = c.about;
+    if (c.services) {
+      var n = cleanServices(c.services.nutrition), p = cleanServices(c.services.physio);
+      if (n) nutrition = n;
+      if (p) physio = p;
+    }
+    if (c.portraitVersion) {
+      var img = $('.portrait img');
+      if (img) img.src = 'dr-fatma.jpg?v=' + encodeURIComponent(String(c.portraitVersion).slice(0, 20));
+    }
+  }
+  // records the booking / application in the Google Sheet (best effort; WhatsApp still opens regardless)
+  function record(payload) {
+    var url = cfg.bookingEndpoint;
+    if (!url || !/^https:\/\/script\.google(usercontent)?\.com\//.test(url)) return;
+    try {
+      fetch(url, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) }).catch(function () {});
+    } catch (e) {}
+  }
+
   /* ---------------- Helpers ---------------- */
   var uid = 0;
   function icon(i) {
@@ -177,12 +217,12 @@
     function cards(list) {
       return list.map(function (s) {
         var name = lang === 'ar' ? s.ar : s.en;
-        var sub = lang === 'ar' ? '' : '<p class="ar" lang="ar">' + s.ar + '</p>';
+        var sub = lang === 'ar' ? '' : '<p class="ar" lang="ar">' + esc(s.ar) + '</p>';
         var d = lang === 'ar' ? s.arD : s.d;
         return '<article class="card tilt reveal' + (rendered ? ' in' : '') + '">' +
           '<div class="card-visual">' + icon(n++) + '</div>' +
           '<h4>' + esc(name) + '</h4>' + sub +
-          '<p class="d">' + d + '</p>' +
+          '<p class="d">' + esc(d) + '</p>' +
           '<a class="more" href="#contact" data-service="' + esc(s.en) + '">' + t('more') + '</a></article>';
       }).join('');
     }
@@ -237,6 +277,12 @@
       if (el.dataset.en === undefined) el.dataset.en = el.innerHTML;
       el.innerHTML = l === 'ar' ? (AR[el.dataset.t] !== undefined ? AR[el.dataset.t] : el.dataset.en) : el.dataset.en;
     });
+    var ab = about || {};
+    [['a_q_v', 'qualifications'], ['a_e_v', 'experience'], ['a_bio_p', 'bio'], ['a_cert_p', 'certifications']].forEach(function (pair) {
+      var o = ab[pair[1]] || {}, v = o[lang] || o[lang === 'ar' ? 'en' : 'ar'];
+      var el = $('[data-t="' + pair[0] + '"]');
+      if (el && typeof v === 'string' && v.trim()) el.textContent = v;
+    });
     var y = $('#year'); if (y) y.textContent = new Date().getFullYear();
 
     document.title = t('title');
@@ -290,15 +336,16 @@
       if (a.hasAttribute('data-tel')) a.href = 'tel:' + String(cfg.phoneDisplay || '').replace(/[^\d+]/g, '');
     });
     $$('[data-cfg="hours"]').forEach(function (e) { e.textContent = cfg.hours || '—'; });
-    if (cfg.mapEmbedUrl) {
+    if (cfg.mapEmbedUrl && /^https:\/\/www\.google\.com\/maps\/embed/.test(cfg.mapEmbedUrl)) {
       $('#map').innerHTML = '<iframe src="' + esc(cfg.mapEmbedUrl) + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Map"></iframe>';
     }
     var soc = cfg.social || {}, box = $('#social');
     [['instagram', 'Instagram'], ['facebook', 'Facebook'], ['tiktok', 'TikTok']].forEach(function (p) {
       var a = document.createElement('a');
       a.textContent = p[1];
-      a.href = soc[p[0]] || '#';
-      if (soc[p[0]]) { a.target = '_blank'; a.rel = 'noopener'; }
+      var link = isHttp(soc[p[0]]) ? soc[p[0]] : '';
+      a.href = link || '#';
+      if (link) { a.target = '_blank'; a.rel = 'noopener'; }
       box.appendChild(a);
     });
   }
@@ -366,6 +413,7 @@
       var svc = findService(service);
       var svcName = svc ? svc.ar + ' (' + svc.en + ')' : 'لم أحدد بعد';
       var msg = 'مرحباً دكتورة فاطمة، أود حجز موعد.\nالاسم: ' + name + '\nالهاتف: ' + phone + '\nالخدمة: ' + svcName;
+      if (!(form.website && form.website.value)) record({ type: 'booking', name: name, phone: phone, service: svc ? svc.en : 'Not sure', lang: lang });
       deliver(msg, status, t('sent'));
       form.reset();
     });
@@ -398,6 +446,7 @@
         'حاصل على دبلومة تغذية: ' + (dip === 'yes' ? 'نعم' : 'لا') + '\n' +
         'يستطيع العمل من مقر الفرع: نعم\n' +
         'الخبرات والمهارات: ' + exp;
+      if (!(form.website && form.website.value)) record({ type: 'job', name: name, phone: phone, age: age, faculty: faculty, diploma: dip, branch: branch, experience: exp, lang: lang });
       deliver(msg, status, t('sentJob'));
       form.reset();
     });
@@ -616,5 +665,23 @@
     initHero();
     initJourney();
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+  function loadContent() {
+    return new Promise(function (resolve) {
+      var done = false;
+      function finish(c) { if (!done) { done = true; resolve(c); } }
+      setTimeout(function () { finish(null); }, 2500);   // never block the page on a slow request
+      try {
+        fetch('content.json', { cache: 'no-cache' })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(finish, function () { finish(null); });
+      } catch (e) { finish(null); }
+    });
+  }
+  function startSite() {
+    loadContent().then(function (c) {
+      try { applyContent(c); } catch (e) {}
+      boot();
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', startSite); else startSite();
 })();

@@ -1,0 +1,138 @@
+{
+  "contact": {
+    "whatsapp": "201044705350",
+    "phoneDisplay": "01044705350",
+    "hours": "Open 24 hours · every day  |  مفتوح 24 ساعة · كل يوم",
+    "mapEmbedUrl": "",
+    "social": {
+      "instagram": "",
+      "facebook": "https://web.facebook.com/profile.php?id=61572057573848",
+      "tiktok": ""
+    }
+  },
+  "about": {
+    "qualifications": {
+      "ar": "",
+      "en": ""
+    },
+    "experience": {
+      "ar": "",
+      "en": ""
+    },
+    "bio": {
+      "ar": "",
+      "en": ""
+    },
+    "certifications": {
+      "ar": "",
+      "en": ""
+    }
+  },
+  "testimonials": [],
+  "services": {
+    "nutrition": [
+      {
+        "en": "Clinical Nutrition",
+        "ar": "التغذية العلاجية السريرية",
+        "d": "Nutrition assessment and planning built around your medical and personal needs.",
+        "arD": "تقييم غذائي وخطة تغذية مبنية على احتياجاتك الصحية والشخصية."
+      },
+      {
+        "en": "Weight Loss & Obesity Management",
+        "ar": "إنقاص الوزن وعلاج السمنة",
+        "d": "Structured, sustainable programs with regular follow-up.",
+        "arD": "برامج منظمة ومستدامة مع متابعة منتظمة."
+      },
+      {
+        "en": "Weight Gain Programs",
+        "ar": "برامج زيادة الوزن",
+        "d": "Balanced plans to build weight in a healthy way.",
+        "arD": "خطط متوازنة لزيادة الوزن بطريقة صحية."
+      },
+      {
+        "en": "Therapeutic Nutrition",
+        "ar": "التغذية العلاجية",
+        "d": "Dietary support designed to work alongside your treatment.",
+        "arD": "دعم غذائي مصمم ليعمل جنبًا إلى جنب مع علاجك."
+      },
+      {
+        "en": "Sports Nutrition",
+        "ar": "تغذية الرياضيين",
+        "d": "Fueling and recovery plans matched to your training.",
+        "arD": "خطط تغذية واستشفاء تناسب تدريبك."
+      },
+      {
+        "en": "Nutrition for Diabetes",
+        "ar": "التغذية لمرضى السكر",
+        "d": "Practical meal planning to support everyday blood sugar management.",
+        "arD": "تخطيط وجبات عملي يدعم التحكم اليومي في سكر الدم."
+      },
+      {
+        "en": "Nutrition for PCOS",
+        "ar": "التغذية لتكيس المبايض",
+        "d": "Nutrition guidance tailored to women living with PCOS.",
+        "arD": "إرشادات تغذية مخصصة للسيدات المصابات بتكيس المبايض."
+      },
+      {
+        "en": "Nutrition for Pregnancy & Breastfeeding",
+        "ar": "التغذية للحمل والرضاعة",
+        "d": "Nourishing plans for you and your baby through each stage.",
+        "arD": "خطط مغذية لكِ ولطفلك في كل مرحلة."
+      },
+      {
+        "en": "Child Nutrition",
+        "ar": "تغذية الأطفال",
+        "d": "Age-appropriate guidance for healthy growth and eating habits.",
+        "arD": "إرشادات مناسبة للعمر لنمو صحي وعادات أكل سليمة."
+      },
+      {
+        "en": "Personalized Meal Plans",
+        "ar": "خطط وجبات مخصصة",
+        "d": "Meal plans that fit your taste, schedule and goals.",
+        "arD": "خطط وجبات تناسب ذوقك وجدولك وأهدافك."
+      }
+    ],
+    "physio": [
+      {
+        "en": "Musculoskeletal Rehabilitation",
+        "ar": "تأهيل العضلات والعظام",
+        "d": "Assessment-led rehabilitation for muscles, joints and bones.",
+        "arD": "تأهيل قائم على التقييم للعضلات والمفاصل والعظام."
+      },
+      {
+        "en": "Back & Neck Pain Rehabilitation",
+        "ar": "تأهيل آلام الظهر والرقبة",
+        "d": "Targeted programs to ease strain and restore comfortable movement.",
+        "arD": "برامج موجهة لتخفيف الشد واستعادة الحركة المريحة."
+      },
+      {
+        "en": "Sports Injury Rehabilitation",
+        "ar": "تأهيل الإصابات الرياضية",
+        "d": "Progressive rehab to help you return to activity with confidence.",
+        "arD": "تأهيل تدريجي لمساعدتك على العودة للنشاط بثقة."
+      },
+      {
+        "en": "Post-operative Rehabilitation",
+        "ar": "التأهيل بعد العمليات",
+        "d": "Guided recovery plans following surgery, coordinated with your doctor.",
+        "arD": "خطط تعافٍ موجهة بعد الجراحة بالتنسيق مع طبيبك."
+      },
+      {
+        "en": "Posture Correction",
+        "ar": "تصحيح القوام",
+        "d": "Exercises and habits to improve alignment and daily posture.",
+        "arD": "تمارين وعادات لتحسين القوام والوضعية اليومية."
+      },
+      {
+        "en": "Mobility & Flexibility Programs",
+        "ar": "برامج الحركة والمرونة",
+        "d": "Gentle, structured work to improve range of motion.",
+        "arD": "عمل لطيف ومنظم لتحسين مدى الحركة."
+      }
+    ]
+  },
+  "booking": {
+    "endpoint": ""
+  },
+  "portraitVersion": 2
+}
