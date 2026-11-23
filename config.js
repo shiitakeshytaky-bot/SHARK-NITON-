@@ -13,10 +13,10 @@ window.SITE_CONFIG = {
   whatsapp: "201044705350",
 
   // الرقم الظاهر للزوار (placeholder)
-  phoneDisplay: "+20 104 470 5350",
+  phoneDisplay: "01044705350",
 
-  // مواعيد العمل (مغلق الجمعة والسبت)
-  hours: "Sun – Thu · 12:00 AM – 6:00 PM  |  الأحد – الخميس · 12 ص – 6 م",
+  // مواعيد العمل
+  hours: "Open 24 hours · every day  |  مفتوح 24 ساعة · كل يوم",
 
   // رابط Google Maps Embed (اختياري). من خرائط جوجل: Share > Embed a map > انسخ قيمة src فقط
   mapEmbedUrl: "",
