@@ -24,7 +24,7 @@ window.SITE_CONFIG = {
   // روابط السوشيال ميديا (اتركها فاضية لو مش موجودة)
   social: {
     instagram: "",
-    facebook: "",
+    facebook: "https://web.facebook.com/profile.php?id=61572057573848",
     tiktok: ""
   },
 
