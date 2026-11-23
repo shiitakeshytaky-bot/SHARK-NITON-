@@ -15,8 +15,8 @@ window.SITE_CONFIG = {
   // الرقم الظاهر للزوار (placeholder)
   phoneDisplay: "+20 104 470 5350",
 
-  // مواعيد العمل (placeholder)
-  hours: "Sat – Thu · 10:00 – 20:00  |  السبت – الخميس · 10 ص – 8 م",
+  // مواعيد العمل (مغلق الجمعة والسبت)
+  hours: "Sun – Thu · 12:00 AM – 6:00 PM  |  الأحد – الخميس · 12 ص – 6 م",
 
   // رابط Google Maps Embed (اختياري). من خرائط جوجل: Share > Embed a map > انسخ قيمة src فقط
   mapEmbedUrl: "",
