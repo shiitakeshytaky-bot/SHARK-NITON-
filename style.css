@@ -215,6 +215,18 @@ em{font-style:italic;color:var(--gold)}
 .wk-card h3{font-size:1.35rem;margin-bottom:6px}
 .wk-card .ar{color:var(--sage);font-size:.9rem;margin-bottom:10px}
 .wk-card p:last-child{font-size:.95rem;color:rgba(232,229,219,.82)}
+
+/* job application form */
+.job-form{margin-top:56px;padding:34px 30px}
+.job-form h3{margin-bottom:4px}
+.job-form>.ar{color:var(--sage);margin-bottom:16px}
+.job-req{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 10px}
+.job-req li{padding:6px 14px;border:1px solid var(--line);border-radius:99px;font-size:.82rem;color:var(--gold);background:rgba(197,164,109,.07)}
+.job-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 22px}
+.form textarea{width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(16,21,18,.7);color:var(--ivory);font:inherit;font-size:.95rem;resize:vertical;min-height:110px}
+.form textarea:focus{border-color:var(--gold);outline:none}
+.wk-btns{display:flex;flex-wrap:wrap;gap:12px}
+@media (max-width:700px){.job-grid{grid-template-columns:1fr}.job-form{padding:28px 20px}}
 @media (max-width:1180px){.nav{gap:16px;font-size:.84rem}}
 @media (max-width:1000px){.wk-grid{grid-template-columns:1fr;gap:34px}.wk-poster{width:100%;max-width:520px;margin-inline:auto}}
 /* header actions + language button */

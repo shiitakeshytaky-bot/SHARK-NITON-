@@ -166,8 +166,68 @@
               <p class="ar dup" lang="ar">فرص التدريب والتوظيف</p>
               <p data-t="wk2_p">A workshop that opens doors for nutrition students and graduates, with practical training and job opportunities in the field.</p>
             </article>
-            <a class="btn btn-gold" data-wa-workshop href="#" data-t="wk_cta">Ask about upcoming workshops</a>
+            <div class="wk-btns">
+              <a class="btn btn-gold" href="#apply" data-t="wk_apply">Apply for training &amp; jobs</a>
+              <a class="btn btn-ghost" data-wa-workshop href="#" data-t="wk_cta">Ask about upcoming workshops</a>
+            </div>
           </div>
+        </div>
+
+        <div class="glass form job-form reveal" id="apply">
+          <h3 data-t="jb_h">Apply for training &amp; jobs</h3>
+          <p class="ar dup" lang="ar">قدّم على فرصة التدريب والتوظيف</p>
+          <ul class="job-req" aria-label="Requirements">
+            <li data-t="jb_r1">Work from the branch office</li>
+            <li data-t="jb_r2">Sales mindset and skills</li>
+            <li data-t="jb_r3">Fast at preparing nutrition plans</li>
+          </ul>
+          <form id="job-form" novalidate>
+            <div class="job-grid">
+              <div>
+                <label for="j-name" data-t="jb_name">Full name</label>
+                <input id="j-name" name="name" type="text" autocomplete="name" maxlength="80" required>
+                <span class="err" data-err="j_name" role="alert"></span>
+              </div>
+              <div>
+                <label for="j-phone" data-t="jb_phone">Phone number</label>
+                <input id="j-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required>
+                <span class="err" data-err="j_phone" role="alert"></span>
+              </div>
+              <div>
+                <label for="j-age" data-t="jb_age">Age</label>
+                <input id="j-age" name="age" type="number" inputmode="numeric" min="16" max="70" required>
+                <span class="err" data-err="j_age" role="alert"></span>
+              </div>
+              <div>
+                <label for="j-fac" data-t="jb_fac">Faculty you graduated from</label>
+                <input id="j-fac" name="faculty" type="text" maxlength="100" required>
+                <span class="err" data-err="j_fac" role="alert"></span>
+              </div>
+              <div>
+                <label for="j-dip" data-t="jb_dip">Do you have a nutrition diploma?</label>
+                <select id="j-dip" name="diploma" required>
+                  <option value="" data-t="jb_choose">Select</option>
+                  <option value="yes" data-t="jb_yes">Yes</option>
+                  <option value="no" data-t="jb_no">No</option>
+                </select>
+                <span class="err" data-err="j_dip" role="alert"></span>
+              </div>
+              <div>
+                <label for="j-branch" data-t="jb_branch">Can you work from the branch office?</label>
+                <select id="j-branch" name="branch" required>
+                  <option value="" data-t="jb_choose">Select</option>
+                  <option value="yes" data-t="jb_yes">Yes</option>
+                  <option value="no" data-t="jb_no">No</option>
+                </select>
+                <span class="err" data-err="j_branch" role="alert"></span>
+              </div>
+            </div>
+            <label for="j-exp" data-t="jb_exp">Experience and skills (mention any sales experience)</label>
+            <textarea id="j-exp" name="experience" rows="4" maxlength="600" required></textarea>
+            <span class="err" data-err="j_exp" role="alert"></span>
+            <button class="btn btn-gold" type="submit" data-t="jb_submit">Send my application</button>
+            <p class="form-status" id="job-status" role="status"></p>
+          </form>
         </div>
       </div>
     </section>

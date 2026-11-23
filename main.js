@@ -43,6 +43,13 @@
     wk2_h: 'فرص التدريب والتوظيف',
     wk2_p: 'ورشة تفتح الباب أمام طلاب وخريجي التغذية، بتدريب عملي وفرص عمل في المجال.',
     wk_cta: 'اسأل عن الورش القادمة',
+    wk_apply: 'قدّم على التدريب والتوظيف',
+    jb_h: 'قدّم على فرصة التدريب والتوظيف',
+    jb_r1: 'العمل من مقر الفرع', jb_r2: 'مهارات بيع (Sales)', jb_r3: 'السرعة في تحضير الأنظمة الغذائية',
+    jb_name: 'الاسم بالكامل', jb_phone: 'رقم الهاتف', jb_age: 'السن', jb_fac: 'الكلية المتخرج منها',
+    jb_dip: 'هل حاصل على دبلومة تغذية؟', jb_branch: 'هل تستطيع العمل من مقر الفرع؟',
+    jb_exp: 'الخبرات والمهارات (اذكر أي خبرة في المبيعات)',
+    jb_choose: 'اختر', jb_yes: 'نعم', jb_no: 'لا', jb_submit: 'أرسل طلب التقديم',
     j_eyebrow: 'رحلة المريض', j_title: 'أربع خطوات إلى <em>خطة تناسبك</em>',
     j1: 'الاستشارة الأولى', j2: 'تقييم شخصي', j3: 'خطتك الخاصة', j4: 'المتابعة والتقدم',
     t_eyebrow: 'آراء العملاء', t_title: 'ماذا يقول <em>مرضانا</em>',
@@ -65,6 +72,9 @@
       errName: 'Please enter your name', errPhone: 'Enter a valid phone number', errService: 'Choose a service',
       sent: 'Almost done! WhatsApp is opening with your details — press Send there to complete your booking.',
       webFallback: "WhatsApp didn't open? Use WhatsApp Web",
+      errReq: 'Please fill this in', errAge: 'Enter a valid age (16–70)', errChoose: 'Please choose an answer',
+      errBranch: 'Working from the branch office is required for this role',
+      sentJob: 'Almost done! WhatsApp is opening with your application — press Send there to submit it.',
       sample: 'Sample content', sampleQuote: 'Placeholder testimonial text. Replace with a real patient review.', sampleAuthor: 'Sample patient',
       title: 'Dr. Fatma | Wellness & Rehabilitation — Obour City, Egypt',
       metaDesc: 'Integrated clinical nutrition and physiotherapy in Obour City, Egypt. Personalized plans, evidence-based care and continuous follow-up with Dr. Fatma.',
@@ -76,6 +86,9 @@
       errName: 'من فضلك اكتب اسمك', errPhone: 'رقم الهاتف غير صحيح', errService: 'اختر الخدمة',
       sent: 'خطوة أخيرة! جارٍ فتح واتساب ببياناتك — اضغطي «إرسال» هناك لإتمام الحجز.',
       webFallback: 'واتساب ماتفتحش؟ افتحي واتساب ويب',
+      errReq: 'من فضلك املأ هذا الحقل', errAge: 'اكتب سنًا صحيحًا (16–70)', errChoose: 'من فضلك اختر إجابة',
+      errBranch: 'العمل من مقر الفرع شرط أساسي لهذه الوظيفة',
+      sentJob: 'خطوة أخيرة! جارٍ فتح واتساب بطلب التقديم — اضغط «إرسال» هناك لإرسال طلبك.',
       sample: 'محتوى تجريبي', sampleQuote: 'نص تجريبي لرأي أحد المرضى. استبدله برأي حقيقي.', sampleAuthor: 'مريض تجريبي',
       title: 'د. فاطمة | العافية والتأهيل — مدينة العبور، مصر',
       metaDesc: 'تغذية علاجية وعلاج طبيعي متكاملان في مدينة العبور، مصر. خطط مخصصة ورعاية قائمة على الأدلة العلمية ومتابعة مستمرة مع د. فاطمة.',
@@ -320,6 +333,23 @@
   }
 
   /* ---------------- Booking form ---------------- */
+  // sends the prepared message to WhatsApp (app on computers / wa.me on phones) and tells the visitor what to do next
+  function deliver(msg, status, sentText) {
+    status.innerHTML = '';
+    if (isMobile) {
+      openWa(waUrl(msg));
+      status.textContent = sentText;
+    } else {
+      openWaDesktopApp(msg);
+      status.appendChild(document.createTextNode(sentText + ' '));
+      var fb = document.createElement('a');
+      fb.href = waWebUrl(msg); fb.target = '_blank'; fb.rel = 'noopener';
+      fb.textContent = t('webFallback');
+      fb.style.textDecoration = 'underline';
+      status.appendChild(fb);
+    }
+  }
+
   function initForm() {
     var form = $('#booking-form'), status = $('#form-status');
     function setErr(k, m) { $('[data-err="' + k + '"]').textContent = m || ''; }
@@ -336,19 +366,39 @@
       var svc = findService(service);
       var svcName = svc ? svc.ar + ' (' + svc.en + ')' : 'لم أحدد بعد';
       var msg = 'مرحباً دكتورة فاطمة، أود حجز موعد.\nالاسم: ' + name + '\nالهاتف: ' + phone + '\nالخدمة: ' + svcName;
-      if (isMobile) {
-        openWa(waUrl(msg));
-        status.textContent = t('sent');
-      } else {
-        openWaDesktopApp(msg);
-        status.innerHTML = '';
-        status.appendChild(document.createTextNode(t('sent') + ' '));
-        var fb = document.createElement('a');
-        fb.href = waWebUrl(msg); fb.target = '_blank'; fb.rel = 'noopener';
-        fb.textContent = t('webFallback');
-        fb.style.textDecoration = 'underline';
-        status.appendChild(fb);
-      }
+      deliver(msg, status, t('sent'));
+      form.reset();
+    });
+  }
+
+  function initJobForm() {
+    var form = $('#job-form'), status = $('#job-status');
+    if (!form) return;
+    function setErr(k, m) { $('[data-err="' + k + '"]').textContent = m || ''; }
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var name = form.name.value.trim(), phone = form.phone.value.trim(), age = parseInt(form.age.value, 10);
+      var faculty = form.faculty.value.trim(), exp = form.experience.value.trim();
+      var dip = form.diploma.value, branch = form.branch.value;
+      var digits = phone.replace(/[\s\-+()]/g, '');
+      var ok = true;
+      ['j_name', 'j_phone', 'j_age', 'j_fac', 'j_dip', 'j_branch', 'j_exp'].forEach(function (k) { setErr(k); });
+      status.textContent = '';
+      if (name.length < 2) { setErr('j_name', t('errName')); ok = false; }
+      if (!/^\d{8,15}$/.test(digits)) { setErr('j_phone', t('errPhone')); ok = false; }
+      if (!(age >= 16 && age <= 70)) { setErr('j_age', t('errAge')); ok = false; }
+      if (faculty.length < 2) { setErr('j_fac', t('errReq')); ok = false; }
+      if (!dip) { setErr('j_dip', t('errChoose')); ok = false; }
+      if (!branch) { setErr('j_branch', t('errChoose')); ok = false; }
+      else if (branch === 'no') { setErr('j_branch', t('errBranch')); ok = false; }
+      if (exp.length < 3) { setErr('j_exp', t('errReq')); ok = false; }
+      if (!ok) return;
+      var msg = 'طلب تقديم على فرصة التدريب والتوظيف:\n' +
+        'الاسم: ' + name + '\nالهاتف: ' + phone + '\nالسن: ' + age + '\nالكلية: ' + faculty + '\n' +
+        'حاصل على دبلومة تغذية: ' + (dip === 'yes' ? 'نعم' : 'لا') + '\n' +
+        'يستطيع العمل من مقر الفرع: نعم\n' +
+        'الخبرات والمهارات: ' + exp;
+      deliver(msg, status, t('sentJob'));
       form.reset();
     });
   }
@@ -562,6 +612,7 @@
     applyLang(initial);   // renders cards/testimonials and sets direction
     rendered = true;
     initForm();
+    initJobForm();
     initHero();
     initJourney();
   }
