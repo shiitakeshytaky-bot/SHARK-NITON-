@@ -57,6 +57,7 @@
       more: 'Explore More →',
       errName: 'Please enter your name', errPhone: 'Enter a valid phone number', errService: 'Choose a service',
       sent: 'Almost done! WhatsApp is opening with your details — press Send there to complete your booking.',
+      webFallback: "WhatsApp didn't open? Use WhatsApp Web",
       sample: 'Sample content', sampleQuote: 'Placeholder testimonial text. Replace with a real patient review.', sampleAuthor: 'Sample patient',
       title: 'Dr. Fatma | Wellness & Rehabilitation — Obour City, Egypt',
       metaDesc: 'Integrated clinical nutrition and physiotherapy in Obour City, Egypt. Personalized plans, evidence-based care and continuous follow-up with Dr. Fatma.',
@@ -67,6 +68,7 @@
       more: 'اعرف المزيد ←',
       errName: 'من فضلك اكتب اسمك', errPhone: 'رقم الهاتف غير صحيح', errService: 'اختر الخدمة',
       sent: 'خطوة أخيرة! جارٍ فتح واتساب ببياناتك — اضغطي «إرسال» هناك لإتمام الحجز.',
+      webFallback: 'واتساب ماتفتحش؟ افتحي واتساب ويب',
       sample: 'محتوى تجريبي', sampleQuote: 'نص تجريبي لرأي أحد المرضى. استبدله برأي حقيقي.', sampleAuthor: 'مريض تجريبي',
       title: 'د. فاطمة | العافية والتأهيل — مدينة العبور، مصر',
       metaDesc: 'تغذية علاجية وعلاج طبيعي متكاملان في مدينة العبور، مصر. خطط مخصصة ورعاية قائمة على الأدلة العلمية ومتابعة مستمرة مع د. فاطمة.',
@@ -230,8 +232,25 @@
   }
 
   /* ---------------- Config wiring ---------------- */
-  function waUrl(text) {
-    return 'https://wa.me/' + String(cfg.whatsapp || '').replace(/\D/g, '') + '?text=' + encodeURIComponent(text);
+  var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '') || coarse;
+  function waNum() { return String(cfg.whatsapp || '').replace(/\D/g, ''); }
+  function waUrl(text) {            // universal link: opens the app or WhatsApp Web
+    return 'https://wa.me/' + waNum() + '?text=' + encodeURIComponent(text);
+  }
+  function waWebUrl(text) {
+    return 'https://web.whatsapp.com/send?phone=' + waNum() + '&text=' + encodeURIComponent(text);
+  }
+  function openWa(url) {
+    var w = null;
+    try { w = window.open(url, '_blank'); } catch (e) {}
+    if (w) { try { w.opener = null; } catch (e) {} } else { window.location.href = url; }  // popup blocked -> same tab
+  }
+  // computers: open the installed WhatsApp desktop app directly (skips the extra web page)
+  function openWaDesktopApp(text) {
+    var a = document.createElement('a');
+    a.href = 'whatsapp://send?phone=' + waNum() + '&text=' + encodeURIComponent(text);
+    a.style.display = 'none';
+    document.body.appendChild(a); a.click(); a.remove();
   }
   function wireConfig() {
     $$('[data-wa]').forEach(function (a) {
@@ -306,8 +325,19 @@
       var svc = findService(service);
       var svcName = svc ? svc.ar + ' (' + svc.en + ')' : 'لم أحدد بعد';
       var msg = 'مرحباً دكتورة فاطمة، أود حجز موعد.\nالاسم: ' + name + '\nالهاتف: ' + phone + '\nالخدمة: ' + svcName;
-      window.open(waUrl(msg), '_blank', 'noopener');
-      status.textContent = t('sent');
+      if (isMobile) {
+        openWa(waUrl(msg));
+        status.textContent = t('sent');
+      } else {
+        openWaDesktopApp(msg);
+        status.innerHTML = '';
+        status.appendChild(document.createTextNode(t('sent') + ' '));
+        var fb = document.createElement('a');
+        fb.href = waWebUrl(msg); fb.target = '_blank'; fb.rel = 'noopener';
+        fb.textContent = t('webFallback');
+        fb.style.textDecoration = 'underline';
+        status.appendChild(fb);
+      }
       form.reset();
     });
   }
